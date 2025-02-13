@@ -1,14 +1,8 @@
-import express from "express";
+import app from "./app";
 
-const app = express();
 const PORT = process.env.PORT || 3001;
-
-app.use(express.json());
-
-app.get("/", (req, res) => {
-    res.send("TypeScript server running!");
-});
+const HOST = "127.0.0.1"
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on http://${HOST}:${PORT}`);
 });
