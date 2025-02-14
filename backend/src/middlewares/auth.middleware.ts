@@ -1,22 +1,16 @@
-import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+import { Response, NextFunction } from "express";
+import { verifyToken } from "../utils/jwt";
+import { AuthRequest } from "../types/authRequest"
 
-dotenv.config();
-
-export interface AuthRequest extends Request {
-    user?: any;
-}
-
-export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction): void => {
     const token = req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
         res.status(401).json({ message: "Access denied. No token provided." });
+        return;
     } else {
         try {
-            const decoded = jwt.verify(token, process.env.JWAT_SECRET as string);
-            req.user = decoded;
+            req.user = verifyToken(token);
             next();
         } catch (error) {
             res.status(401).json({ message: "Invalid token." });

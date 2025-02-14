@@ -1,44 +1,56 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import AuthService from "../services/auth.service";
-import bcrypt from "bcrypt";
-import dotenv from "dotenv";
+import { verifyRefreshToken, generateToken } from "../utils/jwt";
 
-dotenv.config();
-
-const users: { email: string; password: string }[] = [];
-
-export const register = async (req: Request, res: Response, next: NextFunction) => {
+export const register = async (req: Request, res: Response) => {
     try {
-        const { email, password } = req.body;
-
-        if(users.find((u) => u.email === email)) {
-            res.status(400).json({ message: "User alreagy exists "});
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        users.push({ email, password: hashedPassword });
-
+        await AuthService.register(req.body.email, req.body.password)
         res.status(201).json({ message: "User registered successfully" });
     } catch(error) {
-        next(error);
+        if( error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: "An unexpected error occurred" })
+        }
     }
 }
 
-export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const login = async (req: Request, res: Response) => {
     try {
-        const {email, password } = req.body;
-        const token = await AuthService.login(email, password);
-    
-        if(!token) {
-            res.status(401).json({ message: "Invalid credentials" });
-        } else {
-            res.json({ token });
-        }
+        const { token, refreshToken} = await AuthService.login(req.body.email, req.body.password);
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
+
+        res.json({ token });
     } catch(error) {
-        next(error);
+        if( error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: "An unexpected error occurred" })
+        }
+    }
+}
+
+export const refreshToken = (req: Request, res: Response) => {
+    const refreshToken = req.cookies?.refreshToken;
+    if(!refreshToken) {
+        return res.status(401).json({ message: "Refresh token not found" });
+    }
+
+    try {
+        const decoded: any = verifyRefreshToken(refreshToken);
+        const newToken = generateToken(decoded.userId);
+        res.json({ token: newToken });
+    } catch(error){
+        res.status(403).json( { message: "Invalid refresh token"} );
     }
 }
 
 export const logout = (_req: Request, res: Response) => {
+    res.clearCookie("refreshToken")
     res.json({ message: "Logout completed successfully" })
 }

@@ -1,23 +1,39 @@
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
+import { generateToken, generateRefreshToken } from "../utils/jwt";
+import { fakeDB } from "../config/fakeDB";
+import jwt from "jsonwebtoken";
 
-dotenv.config();
-
-const users = [{ email: "teste@email.com", password: bcrypt.hashSync("123456", 10) }];
+const users: { email: string, password: string }[] = [];
 
 class AuthService {
+    static async register(email: string, password: string) {
+        if(users.find((u) => u.email === email)) {
+            throw new Error("User already exists");
+        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        users.push({ email, password: hashedPassword});
+    }
+
     static async login(email: string, password: string) {
-        const user = users.find((u) => u.email === email);
-        if(!user || !(await bcrypt.compare(password, user.password))) {
-            return null;
+        const user = fakeDB.users.find((u) => u.email === email && u.password === password);
+
+        if (user) {
+            const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET!, { expiresIn: "15m" });
+            const refreshToken = jwt.sign({ email: user.email }, process.env.REFRESH_JWT_SECRET!, { expiresIn: "7d" });
+
+            return { token, refreshToken };
         }
 
-        const token = jwt.sign({ email }, process.env.JWT_SECRET as string, {
-            expiresIn: "1h",
-        });
+        throw new Error("Credenciais inválidas");
 
-        return token;
+        // if(!user || !(await bcrypt.compare(password, user.password))) {
+        //     throw new Error("Invalid credentials");
+        // }
+
+        // return {
+        //     token: generateToken(email),
+        //     refreshToken: generateRefreshToken(email),
+        // };
     }
 }
 
