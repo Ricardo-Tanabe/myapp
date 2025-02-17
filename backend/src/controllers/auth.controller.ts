@@ -19,13 +19,20 @@ export const login = async (req: Request, res: Response) => {
     try {
         const { token, refreshToken} = await AuthService.login(req.body.email, req.body.password);
 
-        res.cookie("refreshToken", refreshToken, {
+        res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
         });
 
-        res.json({ token });
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            path: "/",
+        });
+
+        res.json({ message: "Login successful" });
     } catch(error) {
         if( error instanceof Error) {
             res.status(400).json({ message: error.message });
@@ -38,15 +45,15 @@ export const login = async (req: Request, res: Response) => {
 export const refreshToken = (req: Request, res: Response) => {
     const refreshToken = req.cookies?.refreshToken;
     if(!refreshToken) {
-        return res.status(401).json({ message: "Refresh token not found" });
-    }
-
-    try {
-        const decoded: any = verifyRefreshToken(refreshToken);
-        const newToken = generateToken(decoded.userId);
-        res.json({ token: newToken });
-    } catch(error){
-        res.status(403).json( { message: "Invalid refresh token"} );
+        res.status(401).json({ message: "Refresh token not found" });
+    } else {
+        try {
+            const decoded: any = verifyRefreshToken(refreshToken);
+            const newToken = generateToken(decoded.userId);
+            res.json({ token: newToken });
+        } catch(error){
+            res.status(403).json( { message: "Invalid refresh token"} );
+        }
     }
 }
 
