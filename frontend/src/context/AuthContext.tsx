@@ -14,12 +14,35 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<string | null>(null);
     const router = useRouter();
+    const API_URL = "http://localhost:5000/api/auth"
 
     const getCookie = (name: string) => {
         const cookies = document.cookie.split("; ");
         const tokenCookie = cookies.find((cookie) => cookie.startsWith(`${name}=`));
         return tokenCookie ? tokenCookie.split("=")[1] : null
     }
+
+    useEffect(() => {
+        const checkUser = async () => {
+            try {
+                const res = await fetch(`${API_URL}/me`, {
+                    credentials: "include",
+                });
+
+                if(res.ok) {
+                    const data = await res.json();
+                    setUser(data.user);
+                } else {
+                    setUser(null);
+                }
+            } catch (error) {
+                console.error("Erro ao verificar usuário", error);
+                setUser(null);
+            }
+        }
+
+        checkUser();
+    }, []);
 
     useEffect(() => {
         const token = getCookie("token");
@@ -31,7 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const refreshToken = async () => {
             try {
-                const res = await fetch("http://localhost:5000/api/auth/refresh", {
+                const res = await fetch(`${API_URL}/refresh`, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -61,7 +84,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const login = async (email: string, password: string) => {
         try {
-            const res = await fetch("http://localhost:5000/api/auth/login", {
+            const res = await fetch(`${API_URL}/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
