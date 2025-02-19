@@ -1,23 +1,19 @@
-import { Request, Response, Router } from "express";
-import { login, logout, register, refreshToken } from "../controllers/auth.controller";
+import { Router } from "express";
 import authMiddleware from "../middlewares/auth.middleware";
-import { AuthRequest } from "../types/authRequest";
-import jwt, { VerifyErrors } from "jsonwebtoken";
+import { login,
+         logout,
+         register,
+         refreshToken,
+         requestNewToken,
+         protectedRoute } from "../controllers/auth.controller";
 
 const router = Router();
 
-router.get("/", (req: Request, res: Response) => {
-    res.json({ message: "Welcome to Home"})
-})
 router.post("/login", login);
 router.post("/logout", logout);
 router.post("/register", register);
 router.post("/refresh", refreshToken);
-router.get("/me", authMiddleware, (req: AuthRequest, res: Response) => {
-    res.json({ user: req.user })
-})
-router.get("/protected", authMiddleware, (req: AuthRequest, res: Response) => {
-    res.json({ message: "You have access to this protected route!", user:req.user })
-})
+router.get("/me", authMiddleware, requestNewToken)
+router.get("/protected", authMiddleware, protectedRoute)
 
 export default router;

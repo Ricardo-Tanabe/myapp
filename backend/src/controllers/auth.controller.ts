@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import AuthService from "../services/auth.service";
 import { verifyRefreshToken, generateToken } from "../utils/jwt";
+import { AuthRequest } from "../types/authRequest";
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -60,4 +61,12 @@ export const refreshToken = (req: Request, res: Response) => {
 export const logout = (_req: Request, res: Response) => {
     res.clearCookie("refreshToken")
     res.json({ message: "Logout completed successfully" })
+}
+
+export const requestNewToken = (req: AuthRequest, res: Response) => {
+    res.json({ user:req.user })
+}
+
+export const protectedRoute = (req: AuthRequest, res: Response) => {
+    res.json({ message: "You have access to this protected route!", user:req.user })
 }
