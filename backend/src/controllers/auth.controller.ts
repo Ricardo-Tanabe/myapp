@@ -59,14 +59,15 @@ export const refreshToken = (req: Request, res: Response) => {
 }
 
 export const logout = (_req: Request, res: Response) => {
-    res.clearCookie("refreshToken")
-    res.json({ message: "Logout completed successfully" })
+    res.clearCookie("token");
+    res.clearCookie("refreshToken");
+    res.json({ message: "Logout completed successfully" });
 }
 
 export const requestNewToken = (req: AuthRequest, res: Response) => {
-    res.json({ user:req.user })
+    res.json({ user:req.user });
 }
 
 export const protectedRoute = (req: AuthRequest, res: Response) => {
-    res.json({ message: "You have access to this protected route!", user:req.user })
+    res.json({ message: "You have access to this protected route!", user:req.user });
 }
