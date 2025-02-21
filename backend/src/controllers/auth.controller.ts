@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import AuthService from "../services/auth.service";
 import { verifyRefreshToken, generateToken } from "../utils/jwt";
 import { AuthRequest } from "../types/authRequest";
+import { addInvalidToken, isTokenInvalid } from "../config/tokenStore";
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -30,7 +31,7 @@ export const login = async (req: Request, res: Response) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
-            path: "/",
+            path: "/api/auth/refresh",
         });
 
         res.json({ message: "Login successful" });
@@ -45,23 +46,51 @@ export const login = async (req: Request, res: Response) => {
 
 export const refreshToken = (req: Request, res: Response) => {
     const refreshToken = req.cookies?.refreshToken;
-    if(!refreshToken) {
-        res.status(401).json({ message: "Refresh token not found" });
-    } else {
-        try {
-            const decoded: any = verifyRefreshToken(refreshToken);
-            const newToken = generateToken(decoded.userId);
-            res.json({ token: newToken });
-        } catch(error){
-            res.status(403).json( { message: "Invalid refresh token"} );
-        }
+
+    if(!refreshToken || isTokenInvalid(refreshToken)) {
+        res.status(403).json({ message: "Refresh token not found or invalid" });
+        return;
+    }
+
+    try {
+        const decoded: any = verifyRefreshToken(refreshToken);
+        const newToken = generateToken(decoded.userId);
+
+        res.cookie("token", newToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+            maxAge: 15 * 60 * 1000,
+        });
+
+        res.json({ token: newToken });
+    } catch(error){
+        res.status(403).json( { message: "Invalid refresh token"} );
     }
 }
 
-export const logout = (_req: Request, res: Response) => {
-    res.clearCookie("token");
-    res.clearCookie("refreshToken");
-    res.json({ message: "Logout completed successfully" });
+export const logout = (req: Request, res: Response) => {
+    const refreshToken = req.cookies?.refreshToken;
+
+    if(refreshToken) {
+        addInvalidToken(refreshToken);
+    }
+
+    res.cookie("token", "", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        expires: new Date(0),
+    });
+
+    res.cookie("refreshToken", "", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        expires: new Date(0),
+    });
+
+    res.status(200).json({ message: "Logout completed successfully" });
 }
 
 export const requestNewToken = (req: AuthRequest, res: Response) => {
