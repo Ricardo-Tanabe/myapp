@@ -1,28 +1,26 @@
 import { generateToken, generateRefreshToken } from "../utils/jwt";
 import { fakeDB } from "../config/fakeDB";
-import { comparePassword, hashPassword } from "../utils/hash"
-// import jwt from "jsonwebtoken";
-
-// const users: { email: string, password: string }[] = [];
+import { comparePassword } from "../utils/hash"
 
 class AuthService {
     static async register(email: string, password: string) {
         // TEMPORARY: Users are being stored in memory.
         // When a database is added, remove this logic.
-        if(fakeDB.users.find((u) => u.email === email)) {
+        if(fakeDB.findUser(email)) {
             throw new Error("User already exists");
         }
-        const hashedPassword = await hashPassword(password);
-        fakeDB.users.push({ email, password: hashedPassword});
+        await fakeDB.addUsers(email, password);
     }
 
     static async login(email: string, password: string) {
-        const user = fakeDB.users.find((u) => u.email === email);
+        const user = fakeDB.findUser(email);
         if(!user || !(await comparePassword(password, user.password))) {
             throw new Error("Invalid credentials");
         }
 
         return {
+            // Add unique identifier after implementing the database
+            // by replacing email
             token: generateToken(email),
             refreshToken: generateRefreshToken(email),
         };
