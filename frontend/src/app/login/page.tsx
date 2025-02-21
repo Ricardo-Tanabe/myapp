@@ -1,24 +1,36 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+    const auth = useContext(AuthContext);
+    const router = useRouter();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const auth = useContext(AuthContext);
-    // const [message, setMessage] = useState("");
 
-    if (!auth) return null;
+    useEffect(() => {
+        if(auth?.isAuthChecked && auth?.user) {
+            router.push("/dashboard");
+        }
+    }, [auth?.isAuthChecked, auth?.user, router]);
 
+    if(!auth?.isAuthChecked) return <div className="flex h-screen items-center justify-center"><p>Carregando...</p></div>;
+
+    if (auth?.user) {
+        return null;
+    }
+    
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError("");
 
-        const success = await auth.login(email, password);
+        const success = await auth?.login(email, password);
         if(!success) {
             setError("Credenciais inválidas.");
         }
@@ -35,7 +47,7 @@ export default function Login() {
                     type="email"
                     placeholder="Email"
                     value={email}
-                    onChange={(e => setEmail(e.target.value))}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="border p-2 mb-2 w-full"
                     required
                 />
