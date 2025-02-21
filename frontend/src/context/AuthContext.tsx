@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 interface AuthContextType {
     user: string | null;
     apiError: string | null;
+    isAuthChecked: boolean;
     login: (email: string, password: string) => Promise<boolean>;
     logout: () => void;
 }
@@ -15,6 +16,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<string | null>(null);
     const [apiError, setApiError] = useState<string | null>(null);
+    const [isAuthChecked, setIsAuthChecked] = useState(false);
     const router = useRouter();
     const API_URL = "http://localhost:5000/api/auth"
 
@@ -23,6 +25,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const tokenCookie = cookies.find((cookie) => cookie.startsWith(`${name}=`));
         return tokenCookie ? tokenCookie.split("=")[1] : null
     }
+
+    useEffect(() => {
+        const token = getCookie("token");
+        if(token) {
+            setUser("Usuário autenticado");
+        }
+    }, []);
 
     useEffect(() => {
         const checkUser = async () => {
@@ -43,16 +52,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 setUser(null);
                 setApiError("API offline ou erro na requisição.");
             }
+            setIsAuthChecked(true);
         }
 
         checkUser();
-    }, []);
-
-    useEffect(() => {
-        const token = getCookie("token");
-        if(token) {
-            setUser("Usuário autenticado");
-        }
     }, []);
 
     useEffect(() => {
@@ -60,17 +63,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             try {
                 const res = await fetch(`${API_URL}/refresh`, {
                     method: "POST",
-                    headers: {"Content-Type": "application/json"},
                     credentials: "include",
                 });
 
                 if(!res.ok) {
-                    throw new Error("Falha ao renovar o token")
+                    setUser(null);
+                    return
                 }
 
                 const data = await res.json();
                 if(data.token) {
-                    document.cookie = `token=${data.token}; path=/; Secure;`;
                     setUser("Usuário autenticado");
                 } else {
                     setUser(null);
@@ -81,8 +83,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             }
         }
 
-        refreshToken();
-    }, []);
+        if(user !== null) {
+            refreshToken();
+        }
+    }, [user]);
 
     const login = async (email: string, password: string) => {
         try {
@@ -95,7 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
             if(!res.ok) {
                 setApiError("Erro ao tentar fazer login");
-                console.error("Credenciais inválidas");
+                console.warn("Credenciais inválidas");
                 return false;
             }
             setUser("Usuário autenticado");
@@ -110,19 +114,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const logout = async () => {
-        await fetch(`${API_URL}/logout`,{
-            method: "POST",
-            credentials: "include",
-        })
+        try {
+            const res = await fetch(`${API_URL}/logout`,{
+                method: "POST",
+                credentials: "include",
+            })
 
-        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        setUser(null);
-        router.push("/login");
+            if(res.ok) {
+                setUser(null);
+                router.push("/login");
+            } else {
+                console.error("Erro ao fazer logout")
+            }
+        } catch (error) {
+            console.error("Erro ao conectar com o backend:", error);
+        }
     };
 
     return (
-        <AuthContext.Provider value={{ user, apiError, login, logout}}>
+        <AuthContext.Provider value={{ user, apiError, isAuthChecked, login, logout}}>
             { children }
         </AuthContext.Provider>
     )
