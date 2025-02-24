@@ -1,5 +1,6 @@
 import { Router } from "express";
 import authMiddleware from "../middlewares/auth.middleware";
+import { loginLimiter } from "../middlewares/rateLimiter";
 import { login,
          logout,
          register,
@@ -9,7 +10,7 @@ import { login,
 
 const router = Router();
 
-router.post("/login", login);
+router.post("/login", loginLimiter, login);
 router.post("/logout", logout);
 router.post("/register", register);
 router.post("/refresh", refreshToken);
