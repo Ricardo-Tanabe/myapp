@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import AuthService from "../services/auth.service";
-import { verifyRefreshToken, generateToken } from "../utils/jwt";
+import { verifyRefreshToken, generateToken, generateRefreshToken } from "../utils/jwt";
 import { AuthRequest } from "../types/authRequest";
 import { addInvalidToken, isTokenInvalid } from "../config/tokenStore";
 
@@ -54,13 +54,25 @@ export const refreshToken = (req: Request, res: Response) => {
 
     try {
         const decoded: any = verifyRefreshToken(refreshToken);
+
         const newToken = generateToken(decoded.userId);
+        const newRefreshToken = generateRefreshToken(decoded.userId);
+
+        addInvalidToken(refreshToken);
 
         res.cookie("token", newToken, {
             httpOnly: true,
-            secure: true,
+            secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 15 * 60 * 1000,
+        });
+        
+        res.cookie("refreshToken", newRefreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            path: "/api/auth/refresh",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
         res.json({ token: newToken });
