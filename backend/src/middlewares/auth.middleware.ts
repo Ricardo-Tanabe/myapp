@@ -12,8 +12,9 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
     }
     
     try {
+        const decoded: any = verifyToken(token);
         // FUTURE: Implement user search in the database after validating the token.
-        req.user = verifyToken(token);
+        req.user = { id: decoded.useId, email: decoded.email};
         next();
     } catch (error) {
         res.status(401).json({ message: "Invalid token." });
