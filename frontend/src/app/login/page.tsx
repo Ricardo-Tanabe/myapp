@@ -12,14 +12,25 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    // const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
     useEffect(() => {
-        if(auth?.isAuthChecked && auth?.user) {
-            router.push("/dashboard");
-        }
-    }, [auth?.isAuthChecked, auth?.user, router]);
+        if(!auth) return;
 
-    if(!auth?.isAuthChecked) return <div className="flex h-screen items-center justify-center"><p>Carregando...</p></div>;
+        if(auth?.isCheckingAuth) return;
+
+        if(auth.user) {
+            router.replace("/dashboard");
+        }
+    }, [auth?.user, auth?.isCheckingAuth, router]);
+
+    if(auth?.isCheckingAuth) {
+        return (
+            <div className="flex h-screen items-center justify-center">
+                <p>Carregando...</p>
+            </div>
+        )
+    }
 
     if (auth?.user) {
         return null;
