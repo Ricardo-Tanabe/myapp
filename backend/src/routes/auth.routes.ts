@@ -5,6 +5,7 @@ import { login,
          logout,
          register,
          refreshToken,
+         sendCsrf,
          requestNewToken,
          protectedRoute } from "../controllers/auth.controller";
 
@@ -14,6 +15,7 @@ router.post("/login", loginLimiter, login);
 router.post("/logout", logout);
 router.post("/register", register);
 router.post("/refresh", refreshToken);
+router.get("/csrf-token", sendCsrf);
 router.get("/me", authMiddleware, requestNewToken);
 router.get("/protected", authMiddleware, protectedRoute);
 
