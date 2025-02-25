@@ -14,9 +14,13 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
     try {
         const decoded: any = verifyToken(token);
         // FUTURE: Implement user search in the database after validating the token.
-        req.user = { id: decoded.useId, email: decoded.email};
+        req.user = { id: decoded.userId, email: decoded.email};
         next();
     } catch (error) {
+        if(error instanceof Error && error.name === "TokenExpirederror") {
+            res.status(401).json({ message: "Token expired. Please refresh your session." });
+            return;
+        }
         res.status(401).json({ message: "Invalid token." });
     }
 }
