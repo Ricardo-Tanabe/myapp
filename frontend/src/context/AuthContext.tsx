@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 interface AuthContextType {
     user: string | null;
     apiError: string | null;
-    isAuthChecked: boolean;
+    isCheckingAuth: boolean;
     login: (email: string, password: string) => Promise<boolean>;
     logout: () => void;
 }
@@ -16,7 +16,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<string | null>(null);
     const [apiError, setApiError] = useState<string | null>(null);
-    const [isAuthChecked, setIsAuthChecked] = useState(false);
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const router = useRouter();
     const API_URL = "http://localhost:5000/api/auth"
 
@@ -24,6 +24,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const cookies = document.cookie.split("; ");
         const tokenCookie = cookies.find((cookie) => cookie.startsWith(`${name}=`));
         return tokenCookie ? tokenCookie.split("=")[1] : null
+    }
+
+    const getCsrfToken = async() => {
+        const res = await fetch(`${API_URL}/csrf-token`, {
+            credentials: "include",
+        });
+        const data = await res.json();
+        return data.csrfToken;
     }
 
     useEffect(() => {
@@ -44,15 +52,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 if(res.ok) {
                     const data = await res.json();
                     setUser(data.user);
-                } else {
-                    setUser(null);
                 }
             } catch (error) {
                 console.warn("Erro ao verificar usuário", error);
                 setUser(null);
                 setApiError("API offline ou erro na requisição.");
             }
-            setIsAuthChecked(true);
+            setIsCheckingAuth(false);
         }
 
         checkUser();
@@ -61,12 +67,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const refreshToken = async () => {
             try {
+                const csrfToken = await getCsrfToken();
+
                 const res = await fetch(`${API_URL}/refresh`, {
                     method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-Token": csrfToken,
+                    },
                     credentials: "include",
                 });
 
                 if(!res.ok) {
+                    console.warn("Falha ao renovar token:", res.status, await res.text());
                     setUser(null);
                     return
                 }
@@ -74,8 +87,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 const data = await res.json();
                 if(data.token) {
                     setUser("Usuário autenticado");
-                } else {
-                    setUser(null);
                 }
             } catch (error) {
                 console.warn("Erro ao renovar token:", error);
@@ -90,9 +101,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const login = async (email: string, password: string) => {
         try {
+            const csrfToken = await getCsrfToken();
+
             const res = await fetch(`${API_URL}/login`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": csrfToken,
+                },
                 body: JSON.stringify({ email, password }),
                 credentials: "include",
             });
@@ -115,8 +131,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const logout = async () => {
         try {
+            const csrfToken = await getCsrfToken();
+
             const res = await fetch(`${API_URL}/logout`,{
                 method: "POST",
+                headers: { 
+                    "X-CSRF-Token": csrfToken,
+                },
                 credentials: "include",
             })
 
@@ -132,7 +153,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, apiError, isAuthChecked, login, logout}}>
+        <AuthContext.Provider value={{ user, apiError, isCheckingAuth, login, logout}}>
             { children }
         </AuthContext.Provider>
     )
