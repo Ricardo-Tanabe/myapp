@@ -75,9 +75,10 @@ export const refreshToken = (req: Request, res: Response) => {
 
     try {
         const decoded: any = verifyRefreshToken(refreshToken);
+        const payload = { userId: decoded.userId, role: decoded.role};
 
-        const newToken = generateToken(decoded.userId);
-        const newRefreshToken = generateRefreshToken(decoded.userId);
+        const newToken = generateToken(payload);
+        const newRefreshToken = generateRefreshToken(payload);
 
         res.cookie("token", newToken, {
             httpOnly: true,
