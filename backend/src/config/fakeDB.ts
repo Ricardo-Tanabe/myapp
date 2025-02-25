@@ -3,9 +3,15 @@ import fs from "fs";
 import path from "path";
 import { hashPassword } from "../utils/hash"
 
+interface User {
+    email: string,
+    password: string,
+    role: "user" | "admin"
+}
+
 const dbPath = path.join(process.cwd(), "src", "db.json");
 
-function loadUsers(): { email: string; password: string }[] {
+function loadUsers(): User[] {
     try {
         const data = fs.readFileSync(dbPath, "utf-8");
         const db = JSON.parse(data);
@@ -15,15 +21,15 @@ function loadUsers(): { email: string; password: string }[] {
     }
 }
 
-function saveUsers(users: { email: string; password: string }[]) {
+function saveUsers(users: User[]) {
     fs.writeFileSync(dbPath, JSON.stringify(users, null, 2));
 }
 
 export const fakeDB = {
     users: loadUsers(),
-    addUsers: async (email: string, password: string) => {
+    addUsers: async ({email, password, role = "user"}: User) => {
         const hashedPassword = await hashPassword(password);
-        const newUser = { email, password: hashedPassword};
+        const newUser = { email, password: hashedPassword, role};
         fakeDB.users.push(newUser);
         saveUsers(fakeDB.users);
     },
