@@ -9,7 +9,7 @@ class AuthService {
         if(fakeDB.findUser(email)) {
             throw new Error("User already exists");
         }
-        await fakeDB.addUsers(email, password);
+        await fakeDB.addUsers({ email: email, password: password, role: "user"});
     }
 
     static async login(email: string, password: string) {
@@ -18,11 +18,13 @@ class AuthService {
             throw new Error("Invalid credentials");
         }
 
+        const payload = { userId: email, role: user.role}
+
         return {
             // Add unique identifier after implementing the database
             // by replacing email
-            token: generateToken(email),
-            refreshToken: generateRefreshToken(email),
+            token: generateToken(payload),
+            refreshToken: generateRefreshToken(payload),
         };
     }
 }
