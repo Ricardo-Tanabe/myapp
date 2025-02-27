@@ -13,19 +13,25 @@ interface ButtonLinkProp {
 
 function MenuOption() {
   return (
-    <Menu size={24} />
+    <div className="mr-3">
+      <Menu size={24} />
+    </div>
   );
 }
 
 function SearchBar() {
   return (
-    <Search size={20} className="text-gray-500" />
+    <div className="mx-3">
+      <Search size={20} className="text-gray-500" />
+    </div>
   );
 }
 
 function ScreenTheme() {
   return (
-    <Moon size={20} className="text-gray-500" />
+    <div className="mx-3">
+      <Moon size={20} className="text-gray-500" />
+    </div>
   )
 }
 
@@ -33,29 +39,24 @@ function LogInSignUp() {
   const cssShape = "px-4 py-1 rounded-2xl transition"
   const cssLogin = "bg-green-100 hover:bg-green-500 text-black hover:text-white"
   const cssSignup = "bg-green-400 text-white"
-  const cssAbsPos = "absolute top-0"
   
   return (
-    <div className={`relative w-40 h-9`}>
-      <div className={`${cssAbsPos} left-0 z-20 w-3/4 h-full`}>
-        <ButtonLink id={1} name={"Sign Up"} linkName={"/register"}
-          css={`${cssSignup} ${cssShape}`} />
-      </div>
-      <div className={`${cssAbsPos} right-0 w-3/4 h-full z-10`}>
-        <ButtonLink id={2} name={"Log In"} linkName={"/login"}
-          css={`${cssLogin} ${cssShape} w-full text-right`} />
-      </div>
+    <div className={`h-9 mx-3 sm:w-40 sm:relative max-[350px]:mx-auto`}>
+      <ButtonLink id={1} name={"Sign Up"} linkName={"/register"}
+        css={`${cssSignup} ${cssShape} z-20 hidden sm:block sm:absolute`} />
+      <ButtonLink id={2} name={"Log In"} linkName={"/login"}
+        css={`${cssLogin} ${cssShape} sm:text-right sm:w-full sm:absolute whitespace-nowrap`} />
     </div>
   );
 }
 
 function Header() {
-  const cssFlex = "flex items-center justify-between";
+  const cssFlex = "flex items-center min-w-[330px] justify-between";
   const cssBorder = "border-2 border-solid border-black";
   
   return (
     <>
-      <header className={`${cssFlex} ${cssBorder} pr-3`}>
+      <header className={`${cssBorder} ${cssFlex} px-3`}>
         <Image src="/logo.svg" alt="Logo" width={100} height={100}></Image>
         <MenuOption/>
         <SearchBar/>
