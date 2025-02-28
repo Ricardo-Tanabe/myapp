@@ -1,0 +1,33 @@
+@tailwind components;
+
+@layer components {
+    .border-test {
+        @apply border-2 border-solid border-black;
+    }
+    .flex-normalize {
+        @apply flex flex-col items-center justify-center;
+    }
+    .header-main {
+        @apply flex flex-row items-center justify-between min-w-[330px];
+    }
+    .header-flex-conf {
+        @apply flex flex-row items-center px-3 justify-between w-3/4;
+    }
+    .container-loginSign {
+        @apply h-9 mx-3 sm:w-40 sm:relative max-[350px]:mx-auto;
+    }
+    .login-button {
+        @apply bg-green-100 text-black whitespace-nowrap
+        rounded-2xl transition px-4 py-1
+        sm:text-right sm:w-full sm:absolute
+        hover:bg-green-500 hover:text-white;
+    }
+    .sign-button {
+        @apply bg-green-400 text-white z-20 hidden
+        rounded-2xl transition px-4 py-1
+        sm:block sm:absolute;
+    }
+    .icon-menu {
+        @apply text-gray-500 mr-3 hover:text-gray-800;
+    }
+}

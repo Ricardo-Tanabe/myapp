@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, Search, Sun, Moon } from "lucide-react"
+import { useState } from "react";
 
 interface ButtonLinkProp {
   id: number,
@@ -11,56 +12,77 @@ interface ButtonLinkProp {
   css: string
 }
 
+type theme = "light" | "dark";
+
+interface ScreenThemeProp {
+  theme: theme,
+  setTheme:(theme: theme)=>void
+}
+
 function MenuOption() {
   return (
-    <div className="mr-3">
-      <Menu size={24} />
+    <div className="flex items-center justify-between">
+      <Menu size={24} className="icon-menu sm:hidden" />
+      <div className="hidden mr-2 sm:block">Tutorials</div>
+      <div className="hidden mx-2 sm-2:block">Exercises</div>
+      <div className="hidden mx-2 md-2:block">Certificates</div>
+      <div className="hidden ml-2 sm-3:block">Services</div>
     </div>
   );
 }
 
 function SearchBar() {
   return (
-    <div className="mx-3">
-      <Search size={20} className="text-gray-500" />
+    <div>
+      <Search size={20} className="icon-menu xs:hidden"/>
+      <div className="hidden items-center border border-gray-300 rounded-xl px-2
+      max-w-32 md-2:max-w-28 xs:flex max-xs-2:max-w-28 max-xs:hidden">
+        <input
+          type="text"
+          placeholder="Search..."
+          className="w-full bg-transparent outline-none text-gray-700"/>
+        <Search size={20} className="text-gray-500 ml-2" />
+      </div>
     </div>
   );
 }
 
-function ScreenTheme() {
+function ScreenTheme({theme, setTheme}: ScreenThemeProp) {
+  const handleClickMoon = () => {
+    setTheme("dark")
+  }
+  const handleClickSun = () => {
+    setTheme("light")
+  }
   return (
-    <div className="mx-3">
-      <Moon size={20} className="text-gray-500" />
-    </div>
+    (theme === "light") ?
+      (<Moon size={20} className="icon-menu" onClick={handleClickMoon} />) :
+      (<Sun size={20} className="icon-menu" onClick={handleClickSun} />)
   )
 }
 
 function LogInSignUp() {
-  const cssShape = "px-4 py-1 rounded-2xl transition"
-  const cssLogin = "bg-green-100 hover:bg-green-500 text-black hover:text-white"
-  const cssSignup = "bg-green-400 text-white"
-  
   return (
-    <div className={`h-9 mx-3 sm:w-40 sm:relative max-[350px]:mx-auto`}>
+    <div className="container-loginSign">
       <ButtonLink id={1} name={"Sign Up"} linkName={"/register"}
-        css={`${cssSignup} ${cssShape} z-20 hidden sm:block sm:absolute`} />
+        css="sign-button" />
       <ButtonLink id={2} name={"Log In"} linkName={"/login"}
-        css={`${cssLogin} ${cssShape} sm:text-right sm:w-full sm:absolute whitespace-nowrap`} />
+        css="login-button" />
     </div>
   );
 }
 
 function Header() {
-  const cssFlex = "flex items-center min-w-[330px] justify-between";
-  const cssBorder = "border-2 border-solid border-black";
-  
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   return (
     <>
-      <header className={`${cssBorder} ${cssFlex} px-3`}>
-        <Image src="/logo.svg" alt="Logo" width={100} height={100}></Image>
-        <MenuOption/>
-        <SearchBar/>
-        <ScreenTheme />
+      <header className={`border-test header-main`}>
+        <div className="header-flex-conf">
+          <Image src="/logo.svg" alt="Logo" width={100} height={100}></Image>
+          <MenuOption/>
+          <SearchBar/>
+          <ScreenTheme theme={theme} setTheme={setTheme}/>
+        </div>
         <LogInSignUp />
       </header>
     </>
@@ -68,10 +90,9 @@ function Header() {
 }
 
 function Footer() {
-  const cssBorder = "border-2 border-solid border-black"
   return(
     <>
-      <footer className={`${cssBorder} h-24`}></footer>
+      <footer className={`border-test h-24`}></footer>
     </>
   )
 }
@@ -97,8 +118,6 @@ function ButtonContainer({buttons, cssAuth}: {buttons: ButtonLinkProp[], cssAuth
 }
 
 export default function Home() {
-  const cssBorder = "border-2 border-solid border-black";
-  const cssFlex = "flex flex-col items-center justify-center";
   const cssAuth = "flex justify-center gap-4"
 
   const buttonsAuth: ButtonLinkProp[] = [
@@ -111,7 +130,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className={`${cssBorder} ${cssFlex} min-h-screen bg-gray-100 p-6`}>
+      <main className={`border-test flex-normalize min-h-screen bg-gray-100 p-6`}>
         <h1 className="text-4xl font-bold text-gray-800 mb-4">Full Stack Development Space</h1>
         <p className="text-gray-600 mb-6">
           Explore the platform. Log in to access more features.
