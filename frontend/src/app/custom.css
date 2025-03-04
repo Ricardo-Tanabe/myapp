@@ -5,10 +5,20 @@
     .border-test {
         @apply border-2 border-solid border-black;
     }
+
     .flex-norm-col {
         @apply flex flex-col items-center justify-center;
     }
+
     .flex-norm-row {
         @apply flex flex-row items-center justify-center;
+    }
+
+    .main-button-login {
+        @apply bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-2xl transition;
+    }
+
+    .main-button-register {
+        @apply bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-2xl transition;
     }
 }
