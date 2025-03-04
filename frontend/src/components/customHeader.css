@@ -1,33 +1,54 @@
 @tailwind components;
+@tailwind utilities;
 
 @layer components {
     .header-main {
-        @apply flex flex-row
-        min-w-[330px] bg-white;
+        @apply flex flex-row text-gray-600 min-w-[330px];
     }
 
     .header-flex-conf {
         @apply flex flex-row px-3 justify-between w-3/4;
     }
 
-    .container-loginSign {
+    .header-menu-option {
+        @apply px-2 hidden cursor-pointer
+        hover:text-white hover:bg-green-400;
+    }
+
+    .header-search {
+        @apply rounded-xl px-2 border border-gray-300 max-xs:hidden;
+    }
+
+    .header-search-input {
+        @apply w-full bg-transparent outline-none;
+    }
+
+    .header-container-loginSign {
         @apply h-9 mx-3 sm:w-40 sm:relative max-[350px]:mx-auto;
     }
 
-    .login-button {
+    .header-login-button {
         @apply bg-green-100 text-black whitespace-nowrap
         rounded-2xl transition px-4 py-1
         sm:text-right sm:w-full sm:absolute
         hover:bg-green-500 hover:text-white;
     }
 
-    .sign-button {
+    .header-sign-button {
         @apply bg-green-400 text-white z-20 hidden
         rounded-2xl transition px-4 py-1
         sm:block sm:absolute;
     }
 
-    .icon-menu {
-        @apply text-gray-500 mr-3 hover:text-gray-800;
+    .header-icon-menu {
+        @apply mr-3 hover:text-gray-800 hover:cursor-pointer;
+    }
+}
+
+@layer utilities {
+    .grid-dynamic {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min-content, 277px));
+        grid-auto-flow: dense;
     }
 }
