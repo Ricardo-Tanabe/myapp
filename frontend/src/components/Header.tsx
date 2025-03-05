@@ -53,28 +53,48 @@ function SubmenuContainer({ subjects }: {subjects: Subject[]}) {
       const container = containerRef.current;
       if(!container) return;
 
+      const parentWidth = container.offsetWidth;
       const items = Array.from(container.children) as HTMLDivElement[];
+      const gap = 8;
+
+      let childrensWidthSum = gap;
+      let count = 0;
+
+      for (const child of items) {
+        const childWidth = child.offsetWidth + gap;
+        if(childrensWidthSum + childWidth > parentWidth) break;
+        childrensWidthSum += childWidth;
+        count++;
+      }
       
+      const elementsNumber = items.length;
+      const columnNumber = count;
+      const rowNumber = Math.ceil(elementsNumber/columnNumber);
+
       let x = 0;
       let y = 0;
       let rowHeight = 0;
-      const gap = 8;
 
-      const newPositions = items.map((item) => {
+      const newPositions = items.map((item, index) => {
         const rect = item.getBoundingClientRect();
         const width = rect.width;
         const height = rect.height;
+        let newY = gap;
 
-        if(x + width > container.clientWidth - 15) {
-          x = 0;
-          y += rowHeight + gap;
-          rowHeight = 0;
+        if(index - columnNumber >= 0) {
+          const indexTarget = index - columnNumber;
+          const rectElemAbove = items[indexTarget].getBoundingClientRect();
+          const coordYTarget = rectElemAbove.y;
+          const heightTarget = rectElemAbove.height;
+          newY = coordYTarget + heightTarget + gap;
+          console.log(index ,coordYTarget, heightTarget, newY)
         }
 
-        const position = { left: x, top: y, width: width, height: height};
+        if(index%columnNumber === 0) x = gap;
+
+        const position = { left: x, top: newY, width: width, height: height};
 
         x += width + gap;
-        rowHeight = Math.max(rowHeight, height);
 
         return position;
       });
@@ -91,7 +111,7 @@ function SubmenuContainer({ subjects }: {subjects: Subject[]}) {
   return (
     <div ref={containerRef} className="relative w-full h-full border-test">
       {stableSubjects.map((subject, index) => (
-        <div key={index} className="absolute w-fit h-fit mt-2 ml-2 border-test"
+        <div key={index} className="absolute w-fit h-fit border-test"
           style={positions[index] || {}}>
           <h3 className="text-yellow-300">{ subject.subject }</h3>
           <div className="flex flex-col">
