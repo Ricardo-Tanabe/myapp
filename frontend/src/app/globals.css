@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import "./custom.css";
-@import "../components/customHeader.css";
+@import "../components/header/headerStyles.css";
 
 :root {
   --background: #ffffff;

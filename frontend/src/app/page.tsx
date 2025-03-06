@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <>
-      <main className={`border-test flex-norm-col min-h-screen bg-blue-500 p-6`}>
+      <main className={`border-test flex-norm-col min-h-screen bg-blue-500 p-6 max-w-6xl m-auto`}>
         <h1 className="text-4xl font-bold text-gray-800 mb-4">Full Stack Development Space</h1>
         <p className="text-gray-600 mb-6">
           Explore the platform. Log in to access more features.
