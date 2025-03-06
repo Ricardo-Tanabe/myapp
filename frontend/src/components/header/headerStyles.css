@@ -1,0 +1,50 @@
+@tailwind components;
+
+@layer components {
+    .header-main {
+        @apply relative flex flex-row justify-between
+        text-gray-600 m-auto min-w-[330px] max-w-6xl;
+    }
+
+    .header-flex-conf {
+        @apply flex flex-row justify-between w-3/4;
+    }
+
+    .header-menu-option {
+        @apply px-2 hidden cursor-pointer h-full;
+    }
+
+    .header-menu-behavior {
+        @apply hover:text-white hover:bg-green-400;
+    }
+
+    .header-menu-selected {
+        @apply bg-neutral-500 text-white;
+    }
+
+    .header-submenu-body {
+        @apply absolute bottom-0 right-0 transform translate-y-full
+        w-full p-8 bg-neutral-500 cursor-default;
+    }
+
+    .header-search {
+        @apply rounded-xl px-2 mr-3 border border-gray-300 max-xs:hidden;
+    }
+
+    .header-login-button {
+        @apply bg-green-100 text-black whitespace-nowrap
+        rounded-2xl transition px-4 py-1
+        sm:text-right sm:w-full sm:absolute
+        hover:bg-green-500 hover:text-white;
+    }
+
+    .header-sign-button {
+        @apply bg-green-400 text-white z-20 hidden
+        rounded-2xl transition px-4 py-1
+        sm:block sm:absolute;
+    }
+
+    .header-icon-menu {
+        @apply mr-3 hover:text-gray-800 hover:cursor-pointer;
+    }
+}
