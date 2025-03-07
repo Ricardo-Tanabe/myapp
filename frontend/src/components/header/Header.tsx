@@ -10,9 +10,10 @@ import { LogInSignUp } from "./LogInSignUp";
 export default function Header() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   return (
+    // 
     <>
       <header className={`border-test`}>
-        <div className={`header-main bg-blue-500`}>
+        <div className={`header-main bg-white`}>
           <div className="header-flex-conf">
             <Image src="/logo.svg" alt="Logo" width={100} height={100}></Image>
             <HeaderMenu/>

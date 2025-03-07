@@ -10,7 +10,10 @@ export interface ScreenThemeProp {
 }
   
 export interface MenuItem {
+    text_before: string,
     subtopic: string,
+    text_1: string,
+    text_2: string,
     link_1: string,
     link_2: string
 }
