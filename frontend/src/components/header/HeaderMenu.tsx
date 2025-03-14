@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { MenuItem, Subject, MenuDataProp} from "./HeaderTypes"
+import { MenuItem, Subject, MenuDataProp, ItemsProp } from "./HeaderTypes"
 import { menuData } from "./menuData";
 import { Menu, ChevronDown, ChevronUp} from "lucide-react"
-import { useState, useRef, useEffect } from "react";
-import { arrangeElements } from "@/functions/arrageElements";
+import { useState, useRef, useEffect, JSX } from "react";
+import { arrangeElements } from "@/functions/arrangeElements";
 
 function SubmenuItems({ item }: { item: MenuItem }) {
   return(
@@ -27,35 +27,52 @@ function SubmenuItems({ item }: { item: MenuItem }) {
   );
 }
 
+const initialColumn = (subjects: Subject[]) => {
+  return subjects.map((subject, idx) => (
+    <div key={idx} className="flex flex-col w-fit">
+      <h3 className="text-yellow-300">{ subject.subject }</h3>
+      {subject.items.map((elements, idx) =>
+        <SubmenuItems key={idx} item={elements}/>
+      )}
+    </div> 
+  ));
+}
+
 function SubmenuContainer({ subjects }: {subjects: Subject[]}) {
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const [gridStyles, setGridStyles] = useState({});
-  const [itemPositions, setItemPositions] = useState<{ row: number }[]>([]);
+  const [colList, setColList] = useState<React.ReactNode[][]>([initialColumn(subjects)])
+  const [columnNumber, setColumnNumber] = useState<string>("1");
 
   useEffect(() => {
-    arrangeElements(containerRef, setGridStyles, setItemPositions);
-    window.addEventListener("resize", () => arrangeElements(containerRef, setGridStyles, setItemPositions));
-
-    return () => window.removeEventListener("resize", () => arrangeElements(containerRef, setGridStyles, setItemPositions));
-  }, [subjects]);
-
+    if(containerRef.current) {
+      const handleResize = () => {
+        const newColList = (arrangeElements(containerRef, subjects) || []).map((col) => (
+          col.map((el) => <div key={el.id} dangerouslySetInnerHTML={{__html: el.content}} />)
+        ));
+        setColList(newColList);
+        setColumnNumber(newColList.length.toString());
+      }
+  
+      handleResize();
+  
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, [])
 
   return (
-    <div ref={containerRef} style={gridStyles}>
-      {subjects.map((subject, index) => (
-        <div key={index} className="mt-2 mx-1 w-fit h-fit min-w-[260px]"
-          style={{
-            gridRow: `span ${itemPositions[index]?.row || 1}`
-          }}>
-          <h3 className="text-yellow-300">{ subject.subject }</h3>
-          <div className="flex flex-col">
-            {subject.items.map((item, subindex) => (
-              <SubmenuItems key={subindex} item={item} />
-            ))}
+    <div ref={containerRef} className={`p-3 gap-x-2 justify-center`}
+      style={{
+        display: "grid",
+        gridTemplateColumns: `repeat(${columnNumber}, 1fr)`
+      }}>
+        {colList.map((col, idx) => (
+          <div key={idx + 1000} className="flex flex-col w-fit gap-2">
+            {col.map((element) => element)}
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
   );
 }
 
@@ -115,13 +132,16 @@ export function HeaderMenu() {
         <Menu size={24} className="header-icon-menu h-full sm:hidden" />
         <div className={`${cssPattern} sm:flex ml-2 ${VerifySelected(0)}`} onClick={() => handleClick(0)}>
           Tutorials <ArrowDirection isSelected={isSelected === 0} /></div>
+          { isSelected === 0 ? <><SubmenuOption section={section[isSelected] as keyof MenuDataProp} /></> : <></> }
         <div className={`${cssPattern} sm-2:flex ${VerifySelected(1)}`} onClick={() => handleClick(1)}>
           Exercises <ArrowDirection isSelected={isSelected === 1} /></div>
+          { isSelected === 1 ? <><SubmenuOption section={section[isSelected] as keyof MenuDataProp} /></> : <></> }
         <div className={`${cssPattern} md-2:flex ${VerifySelected(2)}`} onClick={() => handleClick(2)}>
           Certificates <ArrowDirection isSelected={isSelected === 2} /></div>
+          { isSelected === 2 ? <><SubmenuOption section={section[isSelected] as keyof MenuDataProp} /></> : <></> }
         <div className={`${cssPattern} sm-3:flex mr-2 ${VerifySelected(3)}`} onClick={() => handleClick(3)}>
           Services<ArrowDirection isSelected={isSelected === 3} /></div>
-          { [0,1,2,3].includes(isSelected) ? <><SubmenuOption section={section[isSelected] as keyof MenuDataProp} /></> : <></> }
+          { isSelected === 3 ? <><SubmenuOption section={section[isSelected] as keyof MenuDataProp} /></> : <></> }
     </div>
   );
 }

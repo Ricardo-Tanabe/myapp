@@ -35,3 +35,8 @@ export interface MenuDataProp {
     services: MenuSection
 }
 
+export type ItemsProp = {
+    subject: string,
+    items: React.ReactNode[]
+}
+  
