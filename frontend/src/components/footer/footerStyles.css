@@ -1,0 +1,17 @@
+@tailwind components;
+
+@layer components {
+    .footer-main {
+        @apply ;
+    }
+    .footer-menu {
+        @apply justify-between text-yellow-300 gap-y-3
+        font-bold w-full px-10 max-md-3:text-sm max-md-1:mb-5;
+    }
+    .footer-content-title {
+        @apply text-2xl max-md-3:text-lg;
+    }
+    .footer-content-nav {
+        @apply text-sm mt-1 max-md-3:text-[13px];
+    }
+}
