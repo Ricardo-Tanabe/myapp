@@ -1,4 +1,4 @@
-import { MenuDataProp } from "./HeaderTypes"
+import { MenuDataProp } from "./components/HeaderTypes"
 
 export const menuData: MenuDataProp = {
     tutorials: {

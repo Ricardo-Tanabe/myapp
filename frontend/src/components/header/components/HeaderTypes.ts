@@ -34,9 +34,4 @@ export interface MenuDataProp {
     certificates: MenuSection,
     services: MenuSection
 }
-
-export type ItemsProp = {
-    subject: string,
-    items: React.ReactNode[]
-}
   
