@@ -1,4 +1,5 @@
 @tailwind components;
+@tailwind utilities;
 
 @layer components {
     /* Retirar border-test quando app entrar em produção */
@@ -20,5 +21,21 @@
 
     .main-button-register {
         @apply bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-2xl transition;
+    }
+}
+
+@layer utilities {
+    .text-shadow {
+        text-shadow: 0px 0px 2px #000, 0px 0px 2px #000,
+        0px 0px 2px #000, 0px 0px 2px #000;
+    }
+    .box-shadow {
+        box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1),
+        1px 1px 8px rgba(0, 0, 0, 0.1),
+        1px 1px 8px rgba(0, 0, 0, 0.1),
+        1px 1px 8px rgba(0, 0, 0, 0.1);
+    }
+    .custom-cursor {
+        caret-color: rgb(31 41 55);
     }
 }
