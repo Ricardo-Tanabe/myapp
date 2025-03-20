@@ -15,7 +15,10 @@ export default {
       screens: {
         'xs': '460px',
         'xs-2': '520px',
+        'xs-2.1': '540px',
+        'xs-2.5': '600px',
         "sm-2": "680px",
+        "sm-2.5": "720px",
         "sm-3": "760px",
         "md-1": "820px",
         "md-2": "870px",
