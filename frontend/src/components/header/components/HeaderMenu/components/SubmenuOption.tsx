@@ -9,16 +9,16 @@ function SubmenuItems({ item }: { item: MenuItem }) {
     <div className="mx-2">
       <div className="flex items-center px-2 whitespace-nowrap">
         <Link  href={item.link_1}
-            className="rounded-md hover:bg-gray-200 group p-1 cursor-pointer">
-          <span className="text-xs text-gray-600 pr-1 group-hover:text-gray-600">{item.text_before}</span>
-          <span className="text-md text-gray-300 group-hover:text-gray-600">{item.subtopic}</span>
+            className="rounded-md hover:bg-gray-400 group p-1 cursor-pointer">
+          <span className="text-xs text-gray-400 pr-1 group-hover:text-gray-100">{item.text_before}</span>
+          <span className="text-md text-gray-600 group-hover:text-gray-100">{item.subtopic}</span>
         </Link>
         <Link href={item.link_1}
-            className="text-yellow-300 hover:underline cursor-pointer">
+            className="text-shadow text-yellow-300 hover:underline cursor-pointer">
           <span className="text-xs px-1">{item.text_1}</span>
         </Link>
         <Link href={item.link_2}
-            className="text-yellow-300 hover:underline cursor-pointer">
+            className="text-shadow text-yellow-300 hover:underline cursor-pointer">
           <span className="text-xs pl-1">{item.text_2}</span>
         </Link>
       </div>
@@ -29,7 +29,7 @@ function SubmenuItems({ item }: { item: MenuItem }) {
 const renderElements = (subjects: Subject[]) => {
   return subjects.map((subject, idx) => (
     <div key={idx + 2000} className="flex flex-col w-fit h-fit">
-      <h3 className="text-yellow-300">{ subject.subject }</h3>
+      <h3 className="text-shadow text-yellow-300">{ subject.subject }</h3>
       {subject.items.map((elements, idx) =>
         <SubmenuItems key={idx + 3000} item={elements}/>
       )}
@@ -87,9 +87,9 @@ function SubmenuContainer({ subjects }: {subjects: Subject[]}) {
 export  function SubmenuOption({ section }: { section: keyof MenuDataProp }) {
       const { title, subjects} = menuData[section];
       return (
-          <div className={`header-submenu-body`}>
+          <div className={`header-submenu-body z-50`}>
             <div className="max-w-4xl m-auto">
-                <h2 className="text-2xl font-bold text-gray-800">{ title }</h2>
+                <h2 className="text-2xl font-bold text-slate-700">{ title }</h2>
                 <SubmenuContainer subjects={subjects} />
             </div>
           </div>

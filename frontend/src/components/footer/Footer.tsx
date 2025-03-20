@@ -11,13 +11,13 @@ export default function Footer() {
     const iconSize = 25
     return(
         <>
-        <footer className={`flex-norm-col w-full`}>
-            <div className="flex-norm-col w-full max-w-6xl bg-white">
+        <footer className={`flex-norm-col footer-main w-full`}>
+            <div className="flex-norm-col w-full max-w-6xl">
                 <div className={`flex-norm-row text-shadow footer-menu
                     max-md-1:flex-norm-col`}>
-                    <div className="w-32 max-w-xs">
+                    <div className="w-32 max-w-xs text-white">
                         <Image src="/logo.svg" alt="Logo" layout="responsive"
-                            width={100} height={100}></Image>
+                            width={100} height={100} />
                     </div>
                     <div className="mt-0"><Link href={"/#"}>PLUS</Link></div>
                     <div><Link href={"/#"}>SPACES</Link></div>
@@ -26,7 +26,7 @@ export default function Footer() {
                     <div><Link href={"/#"}>FOR BUSINESS</Link></div>
                     <div><Link href={"/#"}>CONTACT US</Link></div>
                 </div>
-                <div className={`flex-norm-row gap-x-20 gap-y-3 text-black
+                <div className={`flex-norm-row gap-x-20 gap-y-3
                     text-center max-md-1:flex-norm-col`}>
                     <div className="flex-norm-col">
                         <h4 className="footer-content-title max-md-1:text-2xl">Tutorials</h4>
@@ -98,14 +98,14 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="flex-norm-row gap-1 mt-4">
-                    <AiOutlineYoutube size={iconSize + 4} color="black" />
-                    <TbBrandLinkedin size={iconSize} color="black"/>
-                    <TbBrandDiscord size={iconSize} color="black"/>
-                    <AiOutlineFacebook size={iconSize} color="black"/>
-                    <AiOutlineInstagram size={iconSize} color="black"/>
-                    <AiOutlineGithub size={iconSize} color="black"/>
+                    <AiOutlineYoutube size={iconSize + 4} color="white" />
+                    <TbBrandLinkedin size={iconSize} color="white"/>
+                    <TbBrandDiscord size={iconSize} color="white"/>
+                    <AiOutlineFacebook size={iconSize} color="white"/>
+                    <AiOutlineInstagram size={iconSize} color="white"/>
+                    <AiOutlineGithub size={iconSize} color="white"/>
                 </div>
-                <div className="flex-norm-row gap-2 text-black mt-2">
+                <div className="flex-norm-row gap-2 text-white mt-2">
                     <div>FORUM</div>
                     <div>ABOUT</div>
                     <div>ACADEMY</div>
@@ -115,4 +115,3 @@ export default function Footer() {
         </>
     )
 }
-  

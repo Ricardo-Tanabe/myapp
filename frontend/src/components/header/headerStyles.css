@@ -7,28 +7,30 @@
     }
 
     .header-flex-conf {
-        @apply flex flex-row justify-between w-3/4;
+        @apply flex flex-row items-center justify-between w-full lg:w-3/4;
     }
 
     .header-menu-option {
-        @apply px-2 hidden cursor-pointer h-full;
+        @apply px-2 hidden cursor-pointer h-full text-white;
     }
 
     .header-menu-behavior {
-        @apply hover:text-white hover:bg-green-400;
+        @apply hover:text-white hover:bg-green-500;
     }
 
     .header-menu-selected {
-        @apply bg-neutral-500 text-white;
+        @apply bg-green-500 text-white;
     }
 
     .header-submenu-body {
         @apply absolute bottom-0 right-0 transform translate-y-full
-        w-full p-8 bg-neutral-500 cursor-default;
+        w-full p-8 bg-slate-200 cursor-default;
     }
 
     .header-search {
-        @apply rounded-xl px-2 mr-3 border border-gray-300 max-xs:hidden;
+        @apply rounded-xl px-2 mr-3 border border-gray-300 max-xs:hidden
+        bg-white text-gray-800
+        max-xs-2.5:ml-4;
     }
 
     .header-login-button {
@@ -39,12 +41,12 @@
     }
 
     .header-sign-button {
-        @apply bg-green-400 text-white z-20 hidden
+        @apply bg-green-500 text-white z-20 hidden
         rounded-2xl transition px-4 py-1
         sm:block sm:absolute;
     }
 
     .header-icon-menu {
-        @apply mr-3 hover:text-gray-800 hover:cursor-pointer;
+        @apply text-white hover:cursor-pointer;
     }
 }

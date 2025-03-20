@@ -12,10 +12,10 @@ export default function Header() {
   return (
     // 
     <>
-      <header className={`fixed w-full`}>
-        <div className={`header-main bg-white`}>
+      <header className={`fixed w-full bg-blue-900 shadow-md`}>
+        <div className={`header-main`}>
           <div className="header-flex-conf">
-            <Image src="/logo.svg" alt="Logo" width={100} height={100}></Image>
+            <Image src="/logo.svg" alt="Logo" width={100} height={100} />
             <HeaderMenu/>
             <SearchBar/>
             <ScreenTheme theme={theme} setTheme={setTheme}/>
