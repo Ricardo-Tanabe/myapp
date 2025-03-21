@@ -57,8 +57,10 @@ function SubmenuContainer({ subjects }: {subjects: Subject[]}) {
             return (<div key={el.id} dangerouslySetInnerHTML={{__html: el.content}} />)
           })
         )});
-        setColList(newColList);
-        setColumnNumber(newColList.length.toString());
+        if(newColList.length !== parseInt(columnNumber)) {
+          setColList(newColList);
+          setColumnNumber(newColList.length.toString());
+        }
       }
   
       handleResize();
@@ -66,7 +68,7 @@ function SubmenuContainer({ subjects }: {subjects: Subject[]}) {
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
     }
-  }, [])
+  }, [containerRef, subjects, columnNumber])
 
   return (
     <div ref={containerRef} className={`p-3`}
@@ -87,7 +89,7 @@ function SubmenuContainer({ subjects }: {subjects: Subject[]}) {
 export  function SubmenuOption({ section }: { section: keyof MenuDataProp }) {
       const { title, subjects} = menuData[section];
       return (
-          <div className={`header-submenu-body z-50`}>
+          <div className={`header-submenu-body h-screen z-50`}>
             <div className="max-w-4xl m-auto">
                 <h2 className="text-2xl font-bold text-slate-700">{ title }</h2>
                 <SubmenuContainer subjects={subjects} />

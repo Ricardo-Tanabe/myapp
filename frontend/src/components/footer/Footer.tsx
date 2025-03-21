@@ -31,84 +31,84 @@ export default function Footer() {
                     <div className="flex-norm-col">
                         <h4 className="footer-content-title max-md-1:text-2xl">Tutorials</h4>
                         <ul className="footer-content-nav max-md-1:text-sm">
-                            <li>HTML Tutorial</li>
-                            <li>CSS Tutorial</li>
-                            <li>JavaScript Tutorial</li>
-                            <li>How To Tutorial</li>
-                            <li>SQL Tutorial</li>
-                            <li>Python Tutorial</li>
-                            <li>W3.CSS Tutorial</li>
-                            <li>Bootstrap Tutorial</li>
-                            <li>PHP Tutorial</li>
-                            <li>Java Tutorial</li>
-                            <li>C++ Tutorial</li>
-                            <li>jQuery Tutorial</li>
+                            <li><Link href={"/#"}>HTML Tutorial</Link></li>
+                            <li><Link href={"/#"}>CSS Tutorial</Link></li>
+                            <li><Link href={"/#"}>JavaScript Tutorial</Link></li>
+                            <li><Link href={"/#"}>React Tutorial</Link></li>
+                            <li><Link href={"/#"}>Node.js Tutorial</Link></li>
+                            <li><Link href={"/#"}>npm Tutorial</Link></li>
+                            <li><Link href={"/#"}>Git Tutorial</Link></li>
+                            <li><Link href={"/#"}>GitHub Tutorial</Link></li>
+                            <li><Link href={"/#"}>Tailwind CSS Tutorial</Link></li>
+                            <li><Link href={"/#"}>PostgreSQL Tutorial</Link></li>
+                            <li><Link href={"/#"}>RESTful APIs Tutorial</Link></li>
+                            <li><Link href={"/#"}>JWT Auth Tutorial</Link></li>
                         </ul>
                     </div>
                     <div className="flex-norm-col">
                         <h4 className="footer-content-title max-md-1:text-2xl">References</h4>
                         <ul className="footer-content-nav max-md-1:text-sm">
-                            <li>HTML Reference</li>
-                            <li>CSS Reference</li>
-                            <li>JavaScript Reference</li>
-                            <li>SQL Reference</li>
-                            <li>Python Reference</li>
-                            <li>W3.CSS Reference</li>
-                            <li>Bootstrap Reference</li>
-                            <li>PHP Reference</li>
-                            <li>HTML Colors</li>
-                            <li>Java Reference</li>
-                            <li>Angular Reference</li>
-                            <li>jQuery Reference</li>
+                            <li><Link href={"/#"}>HTML Reference</Link></li>
+                            <li><Link href={"/#"}>CSS Reference</Link></li>
+                            <li><Link href={"/#"}>JavaScript Reference</Link></li>
+                            <li><Link href={"/#"}>React Reference</Link></li>
+                            <li><Link href={"/#"}>Node.js Reference</Link></li>
+                            <li><Link href={"/#"}>npm Reference</Link></li>
+                            <li><Link href={"/#"}>Git Reference</Link></li>
+                            <li><Link href={"/#"}>GitHub Reference</Link></li>
+                            <li><Link href={"/#"}>Tailwind CSS Reference</Link></li>
+                            <li><Link href={"/#"}>PostgreSQL Reference</Link></li>
+                            <li><Link href={"/#"}>RESTful APIs Reference</Link></li>
+                            <li><Link href={"/#"}>JWT Auth Reference</Link></li>
                         </ul>
                     </div>
                     <div className="flex-norm-col">
                         <h4 className="footer-content-title max-md-1:text-2xl">Examples</h4>
                         <ul className="footer-content-nav max-md-1:text-sm">
-                            <li>HTML Examples</li>
-                            <li>CSS Examples</li>
-                            <li>JavaScript Examples</li>
-                            <li>How To Examples</li>
-                            <li>SQL Examples</li>
-                            <li>Python Examples</li>
-                            <li>W3.CSS Examples</li>
-                            <li>Bootstrap Examples</li>
-                            <li>PHP Examples</li>
-                            <li>Java Examples</li>
-                            <li>XML Examples</li>
-                            <li>jQuery Examples</li>
+                            <li><Link href={"/#"}>HTML Examples</Link></li>
+                            <li><Link href={"/#"}>CSS Examples</Link></li>
+                            <li><Link href={"/#"}>JavaScript Examples</Link></li>
+                            <li><Link href={"/#"}>React Examples</Link></li>
+                            <li><Link href={"/#"}>Node.js Examples</Link></li>
+                            <li><Link href={"/#"}>npm Examples</Link></li>
+                            <li><Link href={"/#"}>Git Examples</Link></li>
+                            <li><Link href={"/#"}>GitHub Examples</Link></li>
+                            <li><Link href={"/#"}>Tailwind CSS Examples</Link></li>
+                            <li><Link href={"/#"}>PostgreSQL Examples</Link></li>
+                            <li><Link href={"/#"}>RESTful APIs Examples</Link></li>
+                            <li><Link href={"/#"}>JWT Auth Examples</Link></li>
                         </ul>
                     </div>
                     <div className="flex-norm-col">
                         <h4 className="footer-content-title max-md-1:text-2xl">Get Certified</h4>
                         <ul className="footer-content-nav max-md-1:text-sm">
-                            <li>HTML Certificate</li>
-                            <li>CSS Certificate</li>
-                            <li>JavaScript Certificate</li>
-                            <li>Front End Certificate</li>
-                            <li>SQL Certificate</li>
-                            <li>Python Certificate</li>
-                            <li>PHP Certificate</li>
-                            <li>jQuery Certificate</li>
-                            <li>Java Certificate</li>
-                            <li>C++ Certificate</li>
-                            <li>C# Certificate</li>
-                            <li>XML Certificate</li>
+                            <li><Link href={"/#"}>HTML Certificate</Link></li>
+                            <li><Link href={"/#"}>CSS Certificate</Link></li>
+                            <li><Link href={"/#"}>JavaScript Certificate</Link></li>
+                            <li><Link href={"/#"}>React Certificate</Link></li>
+                            <li><Link href={"/#"}>Node.js Certificate</Link></li>
+                            <li><Link href={"/#"}>npm Certificate</Link></li>
+                            <li><Link href={"/#"}>Git Certificate</Link></li>
+                            <li><Link href={"/#"}>GitHub Certificate</Link></li>
+                            <li><Link href={"/#"}>Tailwind CSS Certificate</Link></li>
+                            <li><Link href={"/#"}>PostgreSQL Certificate</Link></li>
+                            <li><Link href={"/#"}>RESTful APIs Certificate</Link></li>
+                            <li><Link href={"/#"}>JWT Auth Certificate</Link></li>
                         </ul>
                     </div>
                 </div>
                 <div className="flex-norm-row gap-1 mt-4">
-                    <AiOutlineYoutube size={iconSize + 4} color="white" />
-                    <TbBrandLinkedin size={iconSize} color="white"/>
-                    <TbBrandDiscord size={iconSize} color="white"/>
-                    <AiOutlineFacebook size={iconSize} color="white"/>
-                    <AiOutlineInstagram size={iconSize} color="white"/>
-                    <AiOutlineGithub size={iconSize} color="white"/>
+                    <Link href={"/#"}><AiOutlineYoutube size={iconSize + 4} color="white" /></Link>
+                    <Link href={"/#"}><TbBrandLinkedin size={iconSize} color="white"/></Link>
+                    <Link href={"/#"}><TbBrandDiscord size={iconSize} color="white"/></Link>
+                    <Link href={"/#"}><AiOutlineFacebook size={iconSize} color="white"/></Link>
+                    <Link href={"/#"}><AiOutlineInstagram size={iconSize} color="white"/></Link>
+                    <Link href={"/#"}><AiOutlineGithub size={iconSize} color="white"/></Link>
                 </div>
                 <div className="flex-norm-row gap-2 text-white mt-2">
-                    <div>FORUM</div>
-                    <div>ABOUT</div>
-                    <div>ACADEMY</div>
+                    <div><Link href={"/#"}>FORUM</Link></div>
+                    <div><Link href={"/#"}>ABOUT</Link></div>
+                    <div><Link href={"/#"}>ACADEMY</Link></div>
                 </div>
             </div>
         </footer>
