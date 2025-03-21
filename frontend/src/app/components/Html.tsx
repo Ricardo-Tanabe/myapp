@@ -29,7 +29,7 @@ export function Html() {
           homepage-button`}>Get Certified</button>
       </div>
       <div className="homepage-code-container">
-        <p className="text-gray-800 font-bold max-xs-2.1:text-sm">HTML Example</p>
+        <p className="text-gray-800 overflow-x-auto font-bold max-xs-2.1:text-sm">HTML Example</p>
           {/* @ts-ignore */}
           <SyntaxHighlighter language="html" style={oneDark} className="rounded-lg">
             {htmlExample}

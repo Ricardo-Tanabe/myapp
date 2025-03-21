@@ -14,7 +14,7 @@
         @apply flex flex-row items-center justify-center;
     }
     .homepage-main {
-        @apply flex flex-col items-center space-y-48 w-full max-w-6xl;
+        @apply flex flex-col items-center space-y-48 w-full max-w-6xl pb-32;
     }
     .homepage-main-container {
         @apply flex flex-col items-center w-full pt-32 min-w-[400px];
@@ -40,23 +40,23 @@
         max-xs-2.1:text-lg max-xs-2:text-base;
     }
     .homepage-container {
-        @apply flex flex-row items-center justify-center w-full
+        @apply flex flex-row items-center justify-around w-full
         max-md-1:flex-col;
     }
     .homepage-title {
-        @apply text-6xl font-bold text-gray-800 mb-6
+        @apply text-6xl text-center font-bold text-gray-800 mb-6
         max-sm-2.5:text-5xl max-xs-2.1:text-4xl;
     }
     .homepage-description {
-        @apply text-gray-800 font-bold mb-6;
+        @apply text-gray-800 text-center font-bold mb-6;
     }
     .homepage-button {
         @apply font-bold w-56 py-2 rounded-2xl mb-6
         max-xs-2.1:w-48;
     }
     .homepage-code-container {
-        @apply box-shadow rounded-lg px-4 py-4 mb-6 bg-slate-200 w-96
-        overflow-x-hidden max-md-1:w-4/5;
+        @apply box-shadow rounded-lg px-4 py-4 mb-6 bg-slate-200 w-3/5
+        overflow-x-auto max-md-1:w-4/5;
     }
     .homepage-code-button {
         @apply bg-green-600 text-slate-50 hover:bg-green-700 font-bold
