@@ -17,7 +17,7 @@ function verifyContainerSpace(
   items: HTMLDivElement[],
 ) {
   const parentWidth = container.offsetWidth;
-  const gap = 16;
+  const gap = 8;
 
   let childrensWidthSum = gap;
   let count = 0;
