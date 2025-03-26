@@ -7,14 +7,17 @@ class AuthService {
         // TEMPORARY: Users are being stored in memory.
         // When a database is added, remove this logic.
         if(fakeDB.findUser(email)) {
+            console.log("User already exists");
             throw new Error("User already exists");
         }
-        await fakeDB.addUsers({ email: email, password: password, role: "user"});
+        const userID = fakeDB.users.length + 1;
+        await fakeDB.addUsers({ id: userID ,email: email, password: password, role: "user"});
     }
 
     static async login(email: string, password: string) {
         const user = fakeDB.findUser(email);
         if(!user || !(await comparePassword(password, user.password))) {
+            console.log("Credenciais inválidas")
             throw new Error("Invalid credentials");
         }
 
