@@ -1,0 +1,1 @@
+<!-- Explicação da estrutura da aplicação -->

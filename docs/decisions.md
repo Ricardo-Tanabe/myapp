@@ -1,0 +1,1 @@
+<!-- Justificativas para escolhas técnicas feitas -->

@@ -1,0 +1,1 @@
+<!-- Tarefas pendentes ou melhorias futuras -->
