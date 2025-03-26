@@ -8,6 +8,7 @@ interface AuthContextType {
     apiError: string | null;
     isCheckingAuth: boolean;
     login: (email: string, password: string) => Promise<boolean>;
+    register: (email: string, password: string) => Promise<boolean>;
     logout: () => void;
 }
 
@@ -129,6 +130,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return false;
     };
 
+    const register = async (email: string, password: string) => {
+        try {
+            const csrfToken = await getCsrfToken();
+
+            const res = await fetch(`${API_URL}/register`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                    "X-CSRF-Token": csrfToken,
+                },
+                body: JSON.stringify({ email, password }),
+                credentials: "include"
+            })
+
+            if(!res.ok) {
+                setApiError("Erro ao cadastrar usuário");
+                console.warn("Credenciais inválidas");
+                return false;
+            }
+            setUser("Usuário cadastrado");
+            setApiError(null);
+            router.push("/login");
+            return true;
+        } catch (error) {
+            console.error("Erro ao cadastrar:", error);
+            setApiError("Erro ao tentar cadastrar novo usuário");}
+        return false;
+    }
+
     const logout = async () => {
         try {
             const csrfToken = await getCsrfToken();
@@ -153,7 +183,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, apiError, isCheckingAuth, login, logout}}>
+        <AuthContext.Provider value={{ user, apiError, isCheckingAuth, login, register, logout}}>
             { children }
         </AuthContext.Provider>
     )

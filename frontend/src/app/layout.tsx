@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import ClientWrapper from "@/components/ClientWrapper";
-import Header from "@/components/header/Header";
-import Footer from "@/components/footer/Footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,9 +34,7 @@ export default function RootLayout({
         antialiased flex flex-col items-center`}
       >
         <ClientWrapper>
-          <Header />
           {children}
-          <Footer />
         </ClientWrapper>
       </body>
     </html>
