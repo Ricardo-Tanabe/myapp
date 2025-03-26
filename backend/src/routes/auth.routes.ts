@@ -14,12 +14,12 @@ const router = Router();
 
 router.post("/login", loginLimiter, login);
 router.post("/logout", logout);
-router.post("/register", roleMiddleware("admin"), register);
+router.post("/register", register);
 router.post("/refresh", refreshToken);
 router.get("/csrf-token", sendCsrf);
 // roleMiddleware("admin") is just a test to see if it blocks users
 // without permission.
-router.get("/me", authMiddleware, roleMiddleware("admin"), requestNewToken);
+router.get("/me", authMiddleware, requestNewToken); //, roleMiddleware("admin")
 router.get("/protected", authMiddleware, protectedRoute);
 
 export default router;
