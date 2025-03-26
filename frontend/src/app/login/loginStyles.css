@@ -1,0 +1,53 @@
+@tailwind components;
+
+@layer components {
+    .container {
+        @apply bg-slate-800;
+    }
+    .main-content {
+        @apply flex flex-row justify-between p-10 w-full max-w-6xl
+        max-md-3:flex-col max-md-3:justify-center max-md-3:p-0;
+    }
+    .info-container {
+        @apply text-white
+        max-md-3:flex max-md-3:flex-col max-md-3:items-center
+        max-md-3:mb-32;
+    }
+    .info-title {
+        @apply text-4xl font-bold my-5 ml-7
+        max-md-3:text-center max-md-3:ml-0 max-md-3:mt-16;
+    }
+    .info-description {
+        @apply text-lg font-bold my-5 ml-7
+        max-md-3:text-center max-md-3:ml-0;
+    }
+    .course-items {
+        @apply my-3 ml-7 flex items-center justify-start
+        max-md-3:justify-center max-md-3:ml-0;
+    }
+    .form-container {
+        @apply text-gray-800 p-6 border bg-white rounded-lg shadow-md w-96
+        max-md-3:order-first max-md-3:w-full max-md-3:rounded-none;
+    }
+    .social-midia-container {
+        @apply flex flex-row justify-between w-64 m-2
+        max-md-3:w-full;
+    }
+    .social-midia-button {
+        @apply flex items-center justify-center border shadow-sm rounded-md
+        w-[7.5rem] py-1
+        max-md-3:w-1/2;
+    }
+    .input-data {
+        @apply border rounded-md p-2 mb-2 w-64
+        max-md-3:w-full;
+    }
+    .submit-container {
+        @apply flex flex-row justify-between w-64 mx-auto mt-6
+        max-md-3:w-full;
+    }
+    .help-button {
+        @apply border shadow-sm rounded-md w-[7.5rem] py-1
+        max-md-3:w-1/2;
+    }
+}

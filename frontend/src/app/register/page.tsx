@@ -9,7 +9,7 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Login() {
+export default function Signup() {
     const auth = useContext(AuthContext);
     const router = useRouter();
 
@@ -25,7 +25,7 @@ export default function Login() {
         if(auth?.isCheckingAuth) return;
 
         if(auth.user) {
-            router.replace("/dashboard");
+            router.replace("/login");
         }
     }, [auth?.user, auth?.isCheckingAuth, router]);
 
@@ -46,7 +46,7 @@ export default function Login() {
         setLoading(true);
         setError("");
 
-        const success = await auth?.login(email, password);
+        const success = await auth?.register(email, password);
         if(!success) {
             setError("Credenciais inválidas.");
         }
@@ -55,11 +55,13 @@ export default function Login() {
     };
 
     return (
-        <div className="flex-norm-row w-full bg-slate-800">
+        <main className="flex-norm-row w-full bg-slate-800">
             <div className="main-content">
                 <div className="info-container">
-                    <Image src="/logo.svg" alt="Logo" width={150} height={150}
-                    className="mb-7 max-md-3:hidden" />
+                    <Link href={"/"}>
+                        <Image src="/logo.svg" alt="Logo" width={150} height={150}
+                        className="mb-7 max-md-3:hidden" />
+                    </Link>
                     <h2 className="info-title">
                         Become a Full<br />
                         <span className="flex">
@@ -96,28 +98,28 @@ export default function Login() {
                     <div className="flex justify-end">
                     <Link href={"/"}><X /></Link>
                     </div>
-                    <h2 className="text-4xl my-4 ml-9">Log In</h2>
+                    <h2 className="text-4xl my-4 ml-9">Sign Up</h2>
                     <div className="flex-norm-row">
-                        <p className="text-right w-64 mt-6 max-md-3:w-full">Don't have an account?<span> </span>
-                            <Link href={"/register"} className="text-green-600">Sign up</Link>
+                        <p className="text-right w-64 mt-6 max-md-3:w-full">Already have an account?<span> </span>
+                            <Link href={"/login"} className="text-green-600">Log in</Link>
                         </p>
                     </div>
                     <div className="flex-norm-col mt-6">
                         <div className="social-midia-container">
-                            <button className="social-midia-button mr-1">
+                            <a href="https://www.google.com/" className="social-midia-button mr-1">
                                 Google <FaGoogle className="ml-2" />
-                            </button>
-                            <button className="social-midia-button">
+                            </a>
+                            <a href="https://www.facebook.com/" className="social-midia-button">
                                 Facebook <FaFacebookF className="ml-2" />
-                            </button>
+                            </a>
                         </div>
                         <div className="social-midia-container">
-                            <button className="social-midia-button mr-1">
+                            <a href="https://github.com/" className="social-midia-button mr-1">
                                 Github <FaGithub className="ml-2" />
-                            </button>
-                            <button className="social-midia-button">
+                            </a>
+                            <a href="https://www.feide.no/" className="social-midia-button">
                                 Feide
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <div className="text-center text-gray-400 my-3">OR</div>
@@ -139,19 +141,30 @@ export default function Login() {
                             className="input-data"
                             required
                         />
-                        <div className="submit-container">
-                            <button
-                                className="help-button mr-1 text-sm">Forget Password</button>
-                            <button
-                                type="submit"
-                                className={`help-button ${loading ? "bg-gray-400" : "bg-green-500 text-white"}`}
-                                disabled={loading}>
-                                    {loading ? "Loading..." : "Login"}
-                            </button>
+                        <button
+                            type="submit"
+                            className={`help-button w-64 max-md-3:w-full
+                                ${loading ? "bg-gray-400" : "bg-green-500 text-white"}`}
+                            disabled={loading}>
+                                {loading ? "Loading..." : "Sign Up"}
+                        </button>
+                        <p className="w-64 mt-4 text-center text-sm">
+                            By signing up you agree to our
+                            <Link href={"/#"} className="mx-1 text-blue-500 underline hover:text-blue-600">
+                                Terms of Service
+                            </Link>
+                            and
+                            <Link href={"/#"} className="ml-1 text-blue-500 underline hover:text-blue-600">
+                                Privacy Policy
+                            </Link>
+                        </p>
+                        <div className="flex justify-center items-center mt-4">
+                            <input type="checkbox" className="mr-1"/>
+                            Email me with news and updates
                         </div>
                     </div>
                 </form>
             </div>
-        </div>
+        </main>
     );
 };
