@@ -1,0 +1,16 @@
+@tailwind components;
+
+@layer components {
+    .auth-form-description {
+        @apply text-right w-64 mt-6 max-md-3:w-full;
+    }
+    .auth-form-midia-container {
+        @apply flex flex-row justify-between w-64 m-2
+        max-md-3:w-full;
+    }
+    .auth-form-midia-button {
+        @apply flex items-center justify-center border shadow-sm rounded-md
+        w-[7.5rem] py-1
+        max-md-3:w-1/2;
+    }
+}

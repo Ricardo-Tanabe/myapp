@@ -26,12 +26,18 @@ export default function FooterAuth() {
                         width={100} height={100} />
                 </div>
                 <div className="flex-norm-row gap-1 mt-1 ml-16">
-                    <Link href={"/#"}><AiOutlineYoutube size={iconSize + 4} color="white" /></Link>
-                    <Link href={"/#"}><TbBrandLinkedin size={iconSize} color="white"/></Link>
-                    <Link href={"/#"}><TbBrandDiscord size={iconSize} color="white"/></Link>
-                    <Link href={"/#"}><AiOutlineFacebook size={iconSize} color="white"/></Link>
-                    <Link href={"/#"}><AiOutlineInstagram size={iconSize} color="white"/></Link>
-                    <Link href={"/#"}><AiOutlineGithub size={iconSize} color="white"/></Link>
+                    <a href={"https://www.youtube.com/"}>
+                        <AiOutlineYoutube size={iconSize + 4} color="white" /></a>
+                    <a href={"https://www.linkedin.com/"}>
+                        <TbBrandLinkedin size={iconSize} color="white"/></a>
+                    <a href={"https://discord.com/"}>
+                        <TbBrandDiscord size={iconSize} color="white"/></a>
+                    <a href={"https://www.facebook.com/"}>
+                        <AiOutlineFacebook size={iconSize} color="white"/></a>
+                    <a href={"https://www.instagram.com/"}>
+                        <AiOutlineInstagram size={iconSize} color="white"/></a>
+                    <a href={"https://github.com/"}>
+                        <AiOutlineGithub size={iconSize} color="white"/></a>
                 </div>
                 <div className="flex gap-2 text-white mt-4 ml-16 w-3/5 text-sm">
                     <p>
