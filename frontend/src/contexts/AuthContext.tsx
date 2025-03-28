@@ -1,7 +1,9 @@
 "use client";
 
-import { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useState, ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { getCsrfToken } from "./authUtils";
+import { useAuthEffects } from "./useAuthEffects";
 
 interface AuthContextType {
     user: string | null;
@@ -21,88 +23,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const router = useRouter();
     const API_URL = "http://localhost:5000/api/auth"
 
-    const getCookie = (name: string) => {
-        const cookies = document.cookie.split("; ");
-        const tokenCookie = cookies.find((cookie) => cookie.startsWith(`${name}=`));
-        return tokenCookie ? tokenCookie.split("=")[1] : null
-    }
-
-    const getCsrfToken = async() => {
-        const res = await fetch(`${API_URL}/csrf-token`, {
-            credentials: "include",
-        });
-        const data = await res.json();
-        return data.csrfToken;
-    }
-
-    useEffect(() => {
-        const token = getCookie("token");
-        if(token) {
-            setUser("Usuário autenticado");
-        }
-    }, []);
-
-    useEffect(() => {
-        const checkUser = async () => {
-            try {
-                const res = await fetch(`${API_URL}/me`, {
-                    method: "GET",
-                    credentials: "include",
-                });
-
-                if(res.ok) {
-                    const data = await res.json();
-                    setUser(data.user);
-                }
-            } catch (error) {
-                console.warn("Erro ao verificar usuário", error);
-                setUser(null);
-                setApiError("API offline ou erro na requisição.");
-            }
-            setIsCheckingAuth(false);
-        }
-
-        checkUser();
-    }, []);
-
-    useEffect(() => {
-        const refreshToken = async () => {
-            try {
-                const csrfToken = await getCsrfToken();
-
-                const res = await fetch(`${API_URL}/refresh`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-Token": csrfToken,
-                    },
-                    credentials: "include",
-                });
-
-                if(!res.ok) {
-                    console.warn("Falha ao renovar token:", res.status, await res.text());
-                    setUser(null);
-                    return
-                }
-
-                const data = await res.json();
-                if(data.token) {
-                    setUser("Usuário autenticado");
-                }
-            } catch (error) {
-                console.warn("Erro ao renovar token:", error);
-                setUser(null);
-            }
-        }
-
-        if(user !== null) {
-            refreshToken();
-        }
-    }, [user]);
+    useAuthEffects(API_URL, user, setUser, setApiError, setIsCheckingAuth);
 
     const login = async (email: string, password: string) => {
         try {
-            const csrfToken = await getCsrfToken();
+            const csrfToken = await getCsrfToken(API_URL);
 
             const res = await fetch(`${API_URL}/login`, {
                 method: "POST",
@@ -132,7 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const register = async (email: string, password: string) => {
         try {
-            const csrfToken = await getCsrfToken();
+            const csrfToken = await getCsrfToken(API_URL);
 
             const res = await fetch(`${API_URL}/register`, {
                 method: "POST",
@@ -161,7 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const logout = async () => {
         try {
-            const csrfToken = await getCsrfToken();
+            const csrfToken = await getCsrfToken(API_URL);
 
             const res = await fetch(`${API_URL}/logout`,{
                 method: "POST",
