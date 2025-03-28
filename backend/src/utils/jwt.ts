@@ -7,17 +7,37 @@ interface TokenPayload {
 }
 
 export const generateToken = (payload: TokenPayload) => {
-    return jwt.sign(payload, env.JWT_SECRET, { expiresIn: "15m" });
+    try {
+        return jwt.sign(payload, env.JWT_SECRET, { expiresIn: "15m" });
+    } catch (error) {
+        console.error("Error generating token: ", error);
+        throw new Error("Token generation failed")
+    }
 };
 
 export const generateRefreshToken = (payload: TokenPayload) => {
-    return jwt.sign(payload, env.REFRESH_JWT_SECRET, { expiresIn: "7d" });
+    try {
+        return jwt.sign(payload, env.REFRESH_JWT_SECRET, { expiresIn: "7d" });
+    } catch (error) {
+        console.error("Error generating refresh token: ", error);
+        throw new Error("Refresh token generation failed")
+    }
 };
 
 export const verifyToken = (token: string) => {
-    return jwt.verify(token, env.JWT_SECRET);
+    try {
+        return jwt.verify(token, env.JWT_SECRET);
+    } catch (error) {
+        console.error("Invalid or expired token: ", error);
+        return null;
+    }
 }
 
 export const verifyRefreshToken = (token: string) => {
-    return jwt.verify(token, env.REFRESH_JWT_SECRET);
+    try {
+        return jwt.verify(token, env.REFRESH_JWT_SECRET);
+    } catch (error) {
+        console.error("Invalid or expired refresh token: ", error);
+        return null;
+    }
 }
