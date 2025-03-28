@@ -22,21 +22,36 @@ function loadUsers(): User[] {
         const db = JSON.parse(data);
         return db;
     } catch (error) {
+        console.error("Error loading users: ", error);
         return [];
     }
 }
 
 function saveUsers(users: User[]) {
-    fs.writeFileSync(dbPath, JSON.stringify(users, null, 2));
+    try {
+        fs.writeFileSync(dbPath, JSON.stringify(users, null, 2));
+    } catch (error) {
+        console.error("Error saving users: ", error)
+    }
 }
 
 export const fakeDB = {
-    users: loadUsers(),
-    addUsers: async ({id, email, password, role = "user"}: User) => {
-        const hashedPassword = await hashPassword(password);
-        const newUser = { id, email, password: hashedPassword, role};
-        fakeDB.users.push(newUser);
-        saveUsers(fakeDB.users);
+    addUser: async ({ email, password, role = "user"}: Omit<User, "id">) => {
+        const users = loadUsers();
+        const hashedPassword = await hashPassword(password);;
+
+        const newUser = {
+            id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1, // Generates a unique ID
+            email,
+            password: hashedPassword,
+            role
+        }
+        users.push(newUser);
+        saveUsers(users);
+        return newUser;
     },
-    findUser: (email: string) => fakeDB.users.find((u) => u.email === email)
+    findUser: (email: string): User | undefined => {
+        const users = loadUsers();
+        return users.find((u) => u.email === email);
+    }
 };
