@@ -3,6 +3,8 @@
 @tailwind utilities;
 @import "./custom.css";
 @import "./login/loginStyles.css";
+@import "@/components/authInfo/authInfo.css";
+@import "@/components/authForm/authFormHeader.css";
 @import "@/components/header/headerStyles.css";
 @import "@/components/footer/footerStyles.css";
 
