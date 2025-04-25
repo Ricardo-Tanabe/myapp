@@ -9,7 +9,7 @@ import ErrorPage from "@/components/ErrorPage";
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const isHome = pathname === "/" || pathname === "/teste"; // Retirar, pois é apenas para teste => || pathname === "/teste"
+    const isHome = pathname === "/" || pathname === "/teste" || pathname === "/game"; // Retirar, pois é apenas para teste => || pathname === "/teste" e  || pathname === "/game"
     const isAuth = pathname === "/login" || pathname === "/register"
     
     if(isHome) return (
