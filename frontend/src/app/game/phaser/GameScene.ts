@@ -25,6 +25,8 @@ export default class GameScene extends Phaser.Scene {
     titleText!: Phaser.GameObjects.Text;
     score: number = 0;
     scoreText!: Phaser.GameObjects.Text;
+    isGameOver: boolean = false;
+    gameOverText!: Phaser.GameObjects.Text;
 
     constructor() {
         super('GameScene');
@@ -52,10 +54,21 @@ export default class GameScene extends Phaser.Scene {
             color: '#fff'
         });
 
+        this.gameOverText = this.add.text(
+            this.scale.width / 2,
+            this.scale.height / 2,
+            'GAME OVER', {
+            fontSize: '48px',
+            color: '#ff0000'
+        }).setOrigin(0.5);
+
+        this.gameOverText.setVisible(false);
+
         // this.drawGrid();
     }
 
     update(time: number) {
+        if(this.isGameOver) return;
         if(Phaser.Input.Keyboard.JustDown(this.cursors.up!)) this.rotatePiece();
         if(Phaser.Input.Keyboard.JustDown(this.cursors.left!)) this.movePieceHorizontal(-1);
         if(Phaser.Input.Keyboard.JustDown(this.cursors.right!)) this.movePieceHorizontal(1);
@@ -69,9 +82,30 @@ export default class GameScene extends Phaser.Scene {
     spawnPiece() {
         const randomIndex = Phaser.Math.Between(0, TETROMINO_SHAPES.length - 1);
         this.currentShape = TETROMINO_SHAPES[randomIndex].shape;
-        this.currentX = 3;
+        this.currentX = Math.floor(GRID_WIDTH / 2) - Math.floor(this.currentShape[0].length / 2);
         this.currentY = 0;
+
+        for (let row = 0; row < this.currentShape.length; row++) {
+            for (let col = 0; col < this.currentShape[row].length; col++) {
+                if (this.currentShape[row][col]) {
+                    const gridX = this.currentX + col;
+                    const gridY = this.currentY + row;
+
+                    if (gridY >= 0 && this.gridState[gridY][gridX] === 1) {
+                        this.endGame();
+                        return;
+                    }
+                }
+            }
+        }
+
         this.drawCurrentPiece();
+    }
+
+    endGame() {
+        this.isGameOver = true;
+        this.activeBlocks.forEach(block => block.destroy());
+        this.gameOverText.setVisible(true);
     }
 
     drawCurrentPiece(shape = this.currentShape) {
@@ -91,6 +125,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     movePieceDown() {
+        if(this.isGameOver) return;
         if (this.canMoveDown()) {
             for (const block of this.activeBlocks) {
                 block.y = Math.round(block.y / BLOCK_SIZE) * BLOCK_SIZE;
@@ -169,6 +204,7 @@ export default class GameScene extends Phaser.Scene {
     }
     
     movePieceHorizontal(direction: number) {
+        if(this.isGameOver) return;
         let canMove = true;
 
         for (const block of this.activeBlocks) {
@@ -192,6 +228,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     rotatePiece() {
+        if(this.isGameOver) return;
         const newShape = rotateMatrix(this.currentShape);
 
         for (let row = 0; row < newShape.length; row++) {
