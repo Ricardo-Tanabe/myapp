@@ -27,6 +27,7 @@ export default class GameScene extends Phaser.Scene {
     scoreText!: Phaser.GameObjects.Text;
     isGameOver: boolean = false;
     gameOverText!: Phaser.GameObjects.Text;
+    restartButton!: Phaser.GameObjects.Text;
 
     constructor() {
         super('GameScene');
@@ -37,12 +38,9 @@ export default class GameScene extends Phaser.Scene {
     }
 
     create() {
-        this.gridState = Array.from({ length: GRID_HEIGHT}, () =>
-            Array(GRID_WIDTH).fill(0)
-        )
-
+        if(this.restartButton) this.restartButton.destroy();
+        
         this.cursors = this.input!.keyboard!.createCursorKeys();
-        this.spawnPiece()
 
         this.titleText = this.add.text(10, 10, 'Tetris', {
             fontSize: '24px',
@@ -63,6 +61,16 @@ export default class GameScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         this.gameOverText.setVisible(false);
+
+        this.isGameOver = false;
+        this.dropInterval = 1000;
+        this.score = 0;
+        this.dropTimer = 0;
+        this.activeBlocks = [];
+        this.gridState = Array.from({ length: GRID_HEIGHT}, () => Array(GRID_WIDTH).fill(0));
+        this.spawnPiece();
+        this.renderGrid();
+        this.scoreText.setText('Score: 0');
 
         // this.drawGrid();
     }
@@ -106,6 +114,21 @@ export default class GameScene extends Phaser.Scene {
         this.isGameOver = true;
         this.activeBlocks.forEach(block => block.destroy());
         this.gameOverText.setVisible(true);
+
+        this.restartButton = this.add.text(
+            this.scale.width / 2,
+            this.scale.height / 2 + 60,
+            'Clique aqui para Reiniciar',
+            { fontSize: '32px', color: '#00ff00' }
+        ).setOrigin(0.5).setInteractive();
+
+        this.restartButton.on('pointerdown', () => {
+            this.scene.restart();
+        });
+
+        this.input.keyboard?.once('keydown-ENTER', () => {
+            this.scene.restart();
+        })
     }
 
     drawCurrentPiece(shape = this.currentShape) {
@@ -177,7 +200,7 @@ export default class GameScene extends Phaser.Scene {
         }
 
         if (linesCleared > 0) {
-            this.score += linesCleared * 100;
+            this.updateScore(linesCleared);
             this.scoreText.setText('Score: ' + this.score);
         }
 
@@ -249,6 +272,28 @@ export default class GameScene extends Phaser.Scene {
         this.activeBlocks.forEach(block => block.destroy());
         this.currentShape = newShape;
         this.drawCurrentPiece();
+    }
+
+    updateScore(lines: number) {
+        let points = 0;
+
+        switch (lines) {
+            case 1:
+                points = 100;
+                break
+            case 2:
+                points = 300;
+                break
+            case 3:
+                points = 500;
+                break
+            case 4:
+                points = 800;
+                break
+        }
+
+        this.score += points;
+        this.scoreText.setText(`Score: ${this.score}`);
     }
 
 }
