@@ -28,6 +28,8 @@ export default class GameScene extends Phaser.Scene {
     isGameOver: boolean = false;
     gameOverText!: Phaser.GameObjects.Text;
     restartButton!: Phaser.GameObjects.Text;
+    level: number = 1;
+    levelText!: Phaser.GameObjects.Text;
 
     constructor() {
         super('GameScene');
@@ -39,7 +41,7 @@ export default class GameScene extends Phaser.Scene {
 
     create() {
         if(this.restartButton) this.restartButton.destroy();
-        
+
         this.cursors = this.input!.keyboard!.createCursorKeys();
 
         this.titleText = this.add.text(10, 10, 'Tetris', {
@@ -59,6 +61,11 @@ export default class GameScene extends Phaser.Scene {
             fontSize: '48px',
             color: '#ff0000'
         }).setOrigin(0.5);
+
+        this.levelText = this.add.text(10, 70, 'Level: 1', {
+            fontSize: '20px',
+            color: '#fff'
+        });
 
         this.gameOverText.setVisible(false);
 
@@ -294,6 +301,21 @@ export default class GameScene extends Phaser.Scene {
 
         this.score += points;
         this.scoreText.setText(`Score: ${this.score}`);
+
+        this.updateLevel();
+        this.adjustSpeed();
+    }
+
+    adjustSpeed() {
+        const newDropInterval = Math.max(200, 1000 - Math.floor(this.score / 50) * 10);
+        if(this.dropInterval !== newDropInterval) {
+            this.dropInterval = newDropInterval;
+        }
+    }
+
+    updateLevel() {
+        this.level = Math.floor(this.score / 1000) + 1;
+        this.levelText.setText(`Level: ${this.level}`);
     }
 
 }
