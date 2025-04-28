@@ -23,6 +23,8 @@ export default class GameScene extends Phaser.Scene {
     dropTimer: number = 0;
     dropInterval: number = 1000;
     titleText!: Phaser.GameObjects.Text;
+    score: number = 0;
+    scoreText!: Phaser.GameObjects.Text;
 
     constructor() {
         super('GameScene');
@@ -42,6 +44,11 @@ export default class GameScene extends Phaser.Scene {
 
         this.titleText = this.add.text(10, 10, 'Tetris', {
             fontSize: '24px',
+            color: '#fff'
+        });
+
+        this.scoreText = this.add.text(10, 40, 'Score: 0', {
+            fontSize: '20px',
             color: '#fff'
         });
 
@@ -123,12 +130,20 @@ export default class GameScene extends Phaser.Scene {
     }
 
     clearFullLines() {
+        let linesCleared = 0;
+
         for (let y = GRID_HEIGHT - 1; y >= 0; y--) {
             if (this.gridState[y].every(cell => cell === 1)) {
                 this.gridState.splice(y, 1);
                 this.gridState.unshift(Array(GRID_WIDTH).fill(0));
+                linesCleared++;
                 y++
             }
+        }
+
+        if (linesCleared > 0) {
+            this.score += linesCleared * 100;
+            this.scoreText.setText('Score: ' + this.score);
         }
 
         for (const child of [...this.children.list]) {
